@@ -4,6 +4,7 @@
   "description": "vaskaniaHolidaybot",
   "main": "app.js",
   "scripts": {
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "format": "prettier --write . && eslint --fix .",
@@ -29,6 +30,7 @@
     "prettier": "^2.5.0"
   },
   "dependencies": {
+    "country-code-emoji": "^2.3.0",
     "node-telegram-bot-api": "^0.54.0",
     "pino": "^7.5.1",
     "pino-pretty": "^7.2.0"
