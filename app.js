@@ -5,7 +5,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const { countryCodeEmoji } = require('country-code-emoji');
 const logger = require('./src/logger');
 
-// const flags = ['GE', 'UK', 'US', 'GB', 'IT', 'GE'];
+const countryArr = ['GE', 'UA', 'US', 'DE', 'GB', 'IT', 'FR', 'GR'];
 
 const bot = new TelegramBot(TOKEN, {
   polling: true,
@@ -13,23 +13,26 @@ const bot = new TelegramBot(TOKEN, {
 
 const handleMessage = (msg) => {
   const text = msg.text.toLocaleLowerCase().trim();
+  console.log(text);
   if (text === '/start') {
     return bot.sendMessage(
       msg.chat.id,
       `Hello ${msg.chat.first_name}, for more information about me please send /about or /links message.`,
       {
         reply_markup: {
-          keyboard: [[countryCodeEmoji('GE'), 'UK', 'US', 'GB', 'IT', 'GE']],
+          keyboard: [countryArr.map((el) => countryCodeEmoji(el))],
           resize_keyboard: true,
           one_time_keyboard: true,
         },
       },
     );
   }
-
+  if (text === countryArr.filter((el) => el == text)) {
+    console.log('match');
+  }
   return bot.sendMessage(msg.chat.id, 'Please send available commands', {
     reply_markup: {
-      keyboard: [['/about', '/links']],
+      keyboard: [countryArr.map((el) => countryCodeEmoji(el))],
       resize_keyboard: true,
       one_time_keyboard: true,
     },
