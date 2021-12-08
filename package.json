@@ -30,9 +30,11 @@
     "prettier": "^2.5.0"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "country-code-emoji": "^2.3.0",
     "node-telegram-bot-api": "^0.54.0",
     "pino": "^7.5.1",
-    "pino-pretty": "^7.2.0"
+    "pino-pretty": "^7.2.0",
+    "utf8": "^3.0.0"
   }
 }
