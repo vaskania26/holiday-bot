@@ -17,22 +17,28 @@ const bot = new TelegramBot(TOKEN, {
 
 const holiday = async (country) => {
   const date = new Date();
-  const response = await axios(
-    `${uri}api_key=${API_KEY}&country=${country}&year=${date.getFullYear()}&month=${
-      date.getMonth() + 1
-    }&day=${date.getDate()}`,
-  );
-  const { data } = response;
-  // eslint-disable-next-line no-console
-  console.log(data);
+  try {
+    const response = await axios(
+      `${uri}api_key=${API_KEY}&country=${country}&year=${date.getFullYear()}&month=${
+        date.getMonth() + 1
+      }&day=${date.getDate()}`,
+    );
+    const { data } = await response;
+    return data;
+  } catch (error) {
+    return 'Choose country';
+  }
 };
 
-const findCountry = (flag) => {
-  const country = ccd.emojiCountryCode(flag);
-  holiday(country);
+const findCountry = async (flag) => {
+  try {
+    return ccd.emojiCountryCode(flag);
+  } catch (error) {
+    return error;
+  }
 };
 
-const handleMessage = (msg) => {
+const handleMessage = async (msg) => {
   const text = msg.text.toLocaleLowerCase().trim();
   if (text === '/start') {
     return bot.sendMessage(msg.chat.id, 'Choose Country', {
@@ -43,7 +49,13 @@ const handleMessage = (msg) => {
       },
     });
   }
-  return findCountry(msg.text);
+
+  const countryCode = await findCountry(msg.text);
+  const answer = await holiday(countryCode);
+  // console.log(answer);
+  return answer.length > 0
+    ? bot.sendMessage(msg.chat.id, `${answer[0].name}`)
+    : bot.sendMessage(msg.chat.id, 'There is no holiday');
 };
 
 bot.on('message', (msg) => {
