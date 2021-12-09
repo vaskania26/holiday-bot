@@ -4,7 +4,7 @@ const ccd = require('country-code-emoji');
 const axios = require('axios');
 
 const API = process.env.API_KEY;
-const logger = require('./src/logger');
+const logger = require('./logger');
 
 const countryArr = ['GE', 'UA', 'US', 'DE', 'GB', 'IT', 'FR', 'GR'];
 const uri = 'https://holidays.abstractapi.com/v1/?';

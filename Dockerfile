@@ -8,9 +8,9 @@ ENV NODE_ENV=production
 
 RUN npm ci --ignore-scripts
 
-COPY ./app.js ./src ./
+COPY ./src ./
 
-CMD ["node", "./app.js"]
+CMD ["node", "./src/app.js"]
 
 
 
