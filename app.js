@@ -11,11 +11,18 @@ const logger = require('./src/logger');
 const countryArr = ['GE', 'UA', 'US', 'DE', 'GB', 'IT', 'FR', 'GR'];
 const uri = 'https://holidays.abstractapi.com/v1/?';
 
+const replyMarkup = {
+  keyboard: [countryArr.map((el) => ccd.countryCodeEmoji(el))],
+  resize_keyboard: true,
+  one_time_keyboard: true,
+};
+
 const bot = new TelegramBot(TOKEN, {
   polling: true,
 });
 
 const holiday = async (country) => {
+  logger.info(`User choosed ${country}.`);
   const date = new Date();
   try {
     const response = await axios(
@@ -26,7 +33,7 @@ const holiday = async (country) => {
     const { data } = await response;
     return data;
   } catch (error) {
-    return 'Choose country';
+    return 'error';
   }
 };
 
@@ -42,23 +49,29 @@ const handleMessage = async (msg) => {
   const text = msg.text.toLocaleLowerCase().trim();
   if (text === '/start') {
     return bot.sendMessage(msg.chat.id, 'Choose Country', {
-      reply_markup: {
-        keyboard: [countryArr.map((el) => ccd.countryCodeEmoji(el))],
-        resize_keyboard: true,
-        one_time_keyboard: true,
-      },
+      reply_markup: replyMarkup,
     });
   }
 
   const countryCode = await findCountry(msg.text);
   const answer = await holiday(countryCode);
-  // console.log(answer);
+  if (answer === 'error') {
+    return bot.sendMessage(msg.chat.id, 'Please Choose Country', {
+      reply_markup: replyMarkup,
+    });
+  }
+
   return answer.length > 0
-    ? bot.sendMessage(msg.chat.id, `${answer[0].name}`)
-    : bot.sendMessage(msg.chat.id, 'There is no holiday');
+    ? answer.forEach((el) => {
+        bot.sendMessage(msg.chat.id, `${el.name}`, {
+          reply_markup: replyMarkup,
+        });
+      })
+    : bot.sendMessage(msg.chat.id, 'There is no holiday', {
+        reply_markup: replyMarkup,
+      });
 };
 
 bot.on('message', (msg) => {
   handleMessage(msg);
-  logger.info(`USER: ${msg.chat.first_name} send message: ${msg.text}.`);
 });

@@ -8,7 +8,7 @@ ENV NODE_ENV=production
 
 RUN npm ci --ignore-scripts
 
-COPY ./*.js ./links.html ./
+COPY ./app.js ./src/logger.js ./
 
 CMD ["node", "./app.js"]
 
