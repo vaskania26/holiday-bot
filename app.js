@@ -1,11 +1,9 @@
-const TOKEN =
-  process.env.TELEGRAM_TOKEN ||
-  '5067471450:AAHwgQ4g4D2AbtZueW9BNoMtMh2B8bnrKlE';
+const TOKEN = process.env.TELEGRAM_TOKEN;
 const TelegramBot = require('node-telegram-bot-api');
 const ccd = require('country-code-emoji');
 const axios = require('axios');
 
-const API_KEY = process.env.API_KEY || '552ba7d9129340c6aa11b4cb9dbd0a42';
+const API = process.env.API_KEY;
 const logger = require('./src/logger');
 
 const countryArr = ['GE', 'UA', 'US', 'DE', 'GB', 'IT', 'FR', 'GR'];
@@ -26,7 +24,7 @@ const holiday = async (country) => {
   const date = new Date();
   try {
     const response = await axios(
-      `${uri}api_key=${API_KEY}&country=${country}&year=${date.getFullYear()}&month=${
+      `${uri}api_key=${API}&country=${country}&year=${date.getFullYear()}&month=${
         date.getMonth() + 1
       }&day=${date.getDate()}`,
     );
